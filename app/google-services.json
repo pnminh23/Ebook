@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "259419402609",
+    "firebase_url": "https://ebook-9b03a-default-rtdb.firebaseio.com",
+    "project_id": "ebook-9b03a",
+    "storage_bucket": "ebook-9b03a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:259419402609:android:19015c39502365777c86d0",
+        "android_client_info": {
+          "package_name": "com.example.ebook_pnminh"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDV13BZgMV2xy-En482KXFqWbjZDAfdUQU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
