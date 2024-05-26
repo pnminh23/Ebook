@@ -14,6 +14,7 @@ import com.example.ebook_pnminh.Fragment.CategoryFragment;
 import com.example.ebook_pnminh.Fragment.HomeFragment;
 import com.example.ebook_pnminh.Fragment.LibraryFragment;
 import com.example.ebook_pnminh.Fragment.SettingFragment;
+import com.example.ebook_pnminh.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -23,10 +24,12 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager2 viewPager;
     ArrayList<Fragment> fragmentArrayList = new ArrayList<>();
     private BottomNavigationView bottomMenu;
+    ActivityMainBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         viewPager = findViewById(R.id.view_paper);
         bottomMenu = findViewById(R.id.bottom_nav);
