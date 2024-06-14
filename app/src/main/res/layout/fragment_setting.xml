@@ -29,12 +29,11 @@
         android:orientation="vertical">
 
         <!-- Hình đại diện -->
-        <ImageView
-            android:id="@+id/profile_image"
+        <Button
+            android:id="@+id/profile_image_button"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@drawable/anh_dai_dien"
-            android:scaleType="centerCrop"
+            android:background="@drawable/anh_dai_dien"
             android:contentDescription="Profile Image" />
 
         <!-- Tên người dùng -->
@@ -50,7 +49,7 @@
 
         <!-- Số điện thoại người dùng -->
         <TextView
-            android:id="@+id/tv_phone_number"
+            android:id="@+id/tv_user_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0335746548"
@@ -170,7 +169,8 @@
             android:padding="16dp"
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:id="@+id/Delete_Account">
 
             <ImageView
                 android:id="@+id/delete_account_icon"

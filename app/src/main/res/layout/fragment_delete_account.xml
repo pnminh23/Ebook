@@ -1,0 +1,74 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="30dp"
+    android:orientation="vertical">
+
+    <!-- Container để chứa nội dung và căn giữa màn hình -->
+    <LinearLayout
+        android:id="@+id/content_container"
+        android:layout_width="374dp"
+        android:layout_height="112dp"
+        android:layout_gravity="center"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <!-- TextView cho thông báo -->
+        <TextView
+            android:id="@+id/message_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="Chúng tôi rất lấy làm tiếc khi bạn muốn rời Ebook, nhưng xin lưu ý các tài khoản đã bị xoá sẽ không được mở trở lại."
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- View để tạo đường kẻ ngăn cách -->
+        <View
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="1dp"
+            android:background="@android:color/black" />
+
+        <!-- LinearLayout để chứa các nút -->
+        <LinearLayout
+            android:id="@+id/button_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <!-- Nút Hủy -->
+            <Button
+                android:id="@+id/cancel_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/white"
+                android:text="Hủy"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <!-- View để tạo đường kẻ giữa các nút -->
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/black" />
+
+            <!-- Nút Xác nhận -->
+            <Button
+                android:id="@+id/confirm_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/white"
+                android:text="Xác nhận"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
