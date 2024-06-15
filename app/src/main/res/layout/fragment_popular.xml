@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Home.PopularFragment"
+    android:backgroundTint="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <LinearLayout
@@ -17,7 +18,4 @@
             android:layout_height="match_parent"
             tools:listitem="@layout/book_item"/>
     </LinearLayout>
-    <!-- TODO: Update blank fragment layout -->
-
-
 </FrameLayout>

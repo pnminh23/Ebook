@@ -3,9 +3,13 @@ package com.example.ebook_pnminh.Home;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,37 +30,56 @@ import java.util.ArrayList;
 
 public class PopularFragment extends Fragment {
 
-    private View popularView;
     private ArrayList<Books> booksPopular;
     private AdapterPopularFragment adapterPopular;
-    RecyclerView recyclerView;
+    FragmentPopularBinding binding;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        popularView = inflater.inflate(R.layout.fragment_popular, container, false);
+        binding = FragmentPopularBinding.inflate(inflater, container, false);
+        loadPopular();
 
-        FirebaseRecyclerOptions<Books> options = new FirebaseRecyclerOptions.Builder<Books>()
-                .setQuery(FirebaseDatabase.getInstance().getReference().child("Book"),Books.class)
-                .build();
-        adapterPopular = new AdapterPopularFragment(options);
-        recyclerView = popularView.findViewById(R.id.recycelView);
-        recyclerView.setAdapter(adapterPopular);
-        return popularView;
+
+        return binding.getRoot();
     }
 
     @Override
-    public void onStart() {
-        adapterPopular.startListening();
-        super.onStart();
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //vch thêm mỗi dòng này
+        binding.recycelView.setLayoutManager(new GridLayoutManager(getContext(),3));
     }
 
-    @Override
-    public void onStop() {
-        adapterPopular.startListening();
+    private void loadPopular() {
+        booksPopular = new ArrayList<>();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Book");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d("Firebase", "onDataChange called");
+                booksPopular.clear();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Books book = ds.getValue(Books.class);
+                    if (book != null) {
+                        booksPopular.add(book);
+                        Log.d("Firebase", "Book added: " + book.getName());
+                    } else {
+                        Log.d("Firebase", "Book is null");
+                    }
+                }
+                adapterPopular = new AdapterPopularFragment(getContext(), booksPopular);
+                binding.recycelView.setAdapter(adapterPopular);
+                Log.d("Firebase", "Adapter set with " + booksPopular.size() + " items");
+            }
 
-        super.onStop();
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("Firebase", "Error: " + error.getMessage());
+            }
+        });
     }
+
 }
