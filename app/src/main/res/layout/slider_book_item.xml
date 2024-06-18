@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.makeramen.roundedimageview.RoundedImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:riv_corner_radius="12dp"
+    >
+
+<!--    <com.denzcoskun.imageslider.ImageSlider-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="200dp"-->
+<!--        app:iss_auto_cycle="true"-->
+<!--        app:iss_period="1000"-->
+<!--        app:iss_delay="0"-->
+<!--        />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/namebook"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:lines="2"-->
+<!--        android:text="Tuổi trẻ đáng giá bao nhiêu"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textSize="10dp"-->
+<!--        android:textStyle="bold" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/authorbook"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:textColor="@color/grey_300"-->
+<!--        android:text="Author Name"-->
+<!--        android:textSize="10dp"-->
+<!--        android:layout_marginTop="4dp"/>-->
+
+</com.makeramen.roundedimageview.RoundedImageView>

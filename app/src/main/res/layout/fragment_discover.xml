@@ -4,12 +4,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Home.DiscoverFragment"
-    android:background="@color/moccasin_200">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical">
+        <androidx.cardview.widget.CardView
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            android:layout_gravity="center"
+            >
+            <com.denzcoskun.imageslider.ImageSlider
+                android:id="@+id/image_slider"
+                android:layout_width="200dp"
+                android:layout_height="300dp"
+                app:iss_auto_cycle="true"
+                app:iss_period="3000"
+                app:iss_delay="1000"
+                app:iss_text_align="CENTER"
+                app:iss_no_dots="true"
+                app:iss_unselected_dot="@drawable/default_unselected_dot"
+                />
+        </androidx.cardview.widget.CardView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+
+            android:background="@color/grey_200"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sách được yêu thích nhất"
+            android:textStyle="bold"
+            android:textSize="15dp"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_favorites"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </LinearLayout>
 
 </FrameLayout>

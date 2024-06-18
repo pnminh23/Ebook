@@ -48,6 +48,9 @@ dependencies {
     implementation(libs.picasso)
     implementation(libs.firebase.ui.database)
     implementation(libs.glide)
+    implementation(libs.imageslideshow)
+    implementation(libs.roundedimageview)
+    implementation(libs.viewpager2)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

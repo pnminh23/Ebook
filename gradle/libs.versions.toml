@@ -17,6 +17,9 @@ supportV4 = "28.0.0"
 picasso = "2.71828"
 firebaseUiDatabase = "8.0.2"
 glide = "5.0.0-rc01"
+imageslideshow = "0.1.2"
+roundedimageview = "2.3.0"
+viewpager2 = "1.1.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -35,6 +38,9 @@ support-v4 = { group = "com.android.support", name = "support-v4", version.ref =
 picasso = { group = "com.squareup.picasso", name = "picasso", version.ref = "picasso" }
 firebase-ui-database = { group = "com.firebaseui", name = "firebase-ui-database", version.ref = "firebaseUiDatabase" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+imageslideshow = { group = "com.github.denzcoskun", name = "ImageSlideshow", version.ref = "imageslideshow" }
+roundedimageview = { group = "com.makeramen", name = "roundedimageview", version.ref = "roundedimageview" }
+viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

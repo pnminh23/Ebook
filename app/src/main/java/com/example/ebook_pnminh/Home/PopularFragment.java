@@ -6,19 +6,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.ebook_pnminh.Adapter.AdapterPopularFragment;
-import com.example.ebook_pnminh.R;
+import com.example.ebook_pnminh.Adapter.BookAdapter;
 import com.example.ebook_pnminh.databinding.FragmentPopularBinding;
 import com.example.ebook_pnminh.model.Books;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,12 +22,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class PopularFragment extends Fragment {
 
-    private ArrayList<Books> booksPopular;
-    private AdapterPopularFragment adapterPopular;
+    private List<Books> booksPopular;
+    private BookAdapter adapterPopular;
     FragmentPopularBinding binding;
 
 
@@ -41,7 +38,7 @@ public class PopularFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentPopularBinding.inflate(inflater, container, false);
         loadPopular();
-
+        binding.recycelView.setLayoutManager(new GridLayoutManager(getContext(),3));
 
         return binding.getRoot();
     }
@@ -49,8 +46,7 @@ public class PopularFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //vch thêm mỗi dòng này
-        binding.recycelView.setLayoutManager(new GridLayoutManager(getContext(),3));
+
     }
 
     private void loadPopular() {
@@ -59,20 +55,21 @@ public class PopularFragment extends Fragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d("Firebase", "onDataChange called");
+//                Log.d("Firebase", "onDataChange called");
                 booksPopular.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Books book = ds.getValue(Books.class);
                     if (book != null) {
                         booksPopular.add(book);
-                        Log.d("Firebase", "Book added: " + book.getName());
-                    } else {
-                        Log.d("Firebase", "Book is null");
+//                        Log.d("Firebase", "Book added: " + book.getName());
                     }
+//                    else {
+//                        Log.d("Firebase", "Book is null");
+//                    }
                 }
-                adapterPopular = new AdapterPopularFragment(getContext(), booksPopular);
+                adapterPopular = new BookAdapter(getContext(), booksPopular);
                 binding.recycelView.setAdapter(adapterPopular);
-                Log.d("Firebase", "Adapter set with " + booksPopular.size() + " items");
+//                Log.d("Firebase", "Adapter set with " + booksPopular.size() + " items");
             }
 
             @Override
