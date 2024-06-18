@@ -44,9 +44,16 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)
+    implementation(libs.support.annotations)
+    implementation(libs.picasso)
+    implementation(libs.firebase.ui.database)
+    implementation(libs.glide)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.espresso.core);
+
+
 
 
     // Add the dependency for the Firebase Authentication library
