@@ -2,12 +2,15 @@ package com.example.ebook_pnminh.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ebook_pnminh.BookActivity;
 import com.example.ebook_pnminh.databinding.BookItemBinding;
 import com.example.ebook_pnminh.model.Books;
 import com.squareup.picasso.Picasso;
@@ -43,12 +46,22 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.HolderPopular>
     public void onBindViewHolder(@NonNull HolderPopular holder, int position) {
         // Get data
         Books book = listBooks.get(position);
+        String bookId = String.valueOf(book.getId());
         String name = book.getName();
         String img = book.getImg();
 
         // Bind data
         holder.binding.namebook.setText(name);
         Picasso.get().load(img).into(holder.binding.imageView);
+        holder.binding.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, BookActivity.class);
+                intent.putExtra("bookId",bookId);
+                context.startActivity(intent);
+
+            }
+        });
     }
 
     @Override
