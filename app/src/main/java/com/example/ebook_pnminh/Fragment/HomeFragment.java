@@ -1,5 +1,6 @@
 package com.example.ebook_pnminh.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,9 +12,11 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.ebook_pnminh.Adapter.TabAdapter;
 import com.example.ebook_pnminh.R;
+import com.example.ebook_pnminh.SearchActivity;
 import com.google.android.material.tabs.TabLayout;
 
 public class HomeFragment extends Fragment {
@@ -21,6 +24,7 @@ public class HomeFragment extends Fragment {
     private TabLayout tabLayout;
     private TabAdapter adapter;
     private View homeView;
+    private TextView search;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,6 +38,14 @@ public class HomeFragment extends Fragment {
         tabLayout.addTab(tabLayout.newTab().setText("Mới nhất"));
         adapter = new TabAdapter(getChildFragmentManager(),getLifecycle());
         tabViewPaper.setAdapter(adapter);
+        search = homeView.findViewById(R.id.tv_search);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
