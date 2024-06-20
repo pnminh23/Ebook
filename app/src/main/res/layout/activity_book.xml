@@ -207,6 +207,6 @@
                 android:textStyle="bold"
                 app:rippleColor="#000000" />
         </LinearLayout>
-
     </LinearLayout>
 </LinearLayout>
+
