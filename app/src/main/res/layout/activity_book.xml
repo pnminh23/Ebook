@@ -1,10 +1,211 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".BookActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:id="@+id/linear_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/frame_header"
+            android:layout_width="match_parent"
+            android:layout_height="325dp"
+            android:gravity="center_horizontal">
+
+            <LinearLayout
+                android:id="@+id/linear_header"
+                android:layout_width="match_parent"
+                android:layout_height="257dp"
+                android:background="#EEE2D1"
+                android:orientation="vertical"
+                android:paddingTop="35dp"
+                android:paddingBottom="35dp">
+
+                <ImageButton
+                    android:id="@+id/btn_back"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="16dp"
+                    app:srcCompat="@drawable/img_4" />
+
+                <TextView
+                    android:id="@+id/txt_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="34dp"
+                    android:layout_marginTop="104dp"
+                    android:text="Đắc Nhân Tâm"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_author"
+                    android:layout_width="100dp"
+                    android:layout_height="29dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="11dp"
+                    android:text="Rosie Nguyễn" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/img_book_cover"
+                android:layout_width="126dp"
+                android:layout_height="180dp"
+                android:layout_gravity="bottom|end"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="17dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/dac_nhan_tam"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/txt_intro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_marginStart="29dp"
+                android:text="Giới thiệu"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="19dp"
+            android:paddingVertical="17dp">
+
+            <TextView
+                android:id="@+id/txt_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:letterSpacing="0.01"
+                android:text="“Đắc Nhân Tâm” là một quyển sách kinh điển của tác giả Dale Carnegie. Cuốn sách này chia sẻ về cách giao tiếp hiệu quả, phê bình xây dựng và tôn trọng người khác. Triết lý của “Đắc Nhân Tâm” là hiểu mình, thành thật với chính mình, từ đó hiểu biết và quan tâm đến những người xung quanh để khơi gợi tiềm năng ẩn khuất và giúp họ phát triển lên một tầm cao mới!" />
+
+            <LinearLayout
+                android:id="@+id/linear_stats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="22dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/img_favorite"
+                    android:layout_width="25dp"
+                    android:layout_height="21dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="1dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:id="@+id/img_eye"
+                    android:layout_width="25dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="83dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="3dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_1"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:id="@+id/img_calendar"
+                    android:layout_width="26dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="83dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_2"
+                    tools:ignore="ContentDescription" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_stats_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="43dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center_vertical|center_horizontal">
+
+                <TextView
+                    android:id="@+id/txt_favorite_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="29" />
+
+                <TextView
+                    android:id="@+id/txt_view_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="94dp"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="11" />
+
+                <TextView
+                    android:id="@+id/txt_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="87dp"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="2022" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="34dp">
+
+            <ImageButton
+                android:id="@+id/btn_favorite"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:backgroundTint="#D9D9D9"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="12dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/img_3"
+                tools:ignore="ContentDescription" />
+
+            <Button
+                android:id="@+id/btn_read_now"
+                android:layout_width="159dp"
+                android:layout_height="50dp"
+                android:backgroundTint="#D3B792"
+                android:text="Đọc ngay"
+                android:textStyle="bold"
+                app:rippleColor="#000000" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
