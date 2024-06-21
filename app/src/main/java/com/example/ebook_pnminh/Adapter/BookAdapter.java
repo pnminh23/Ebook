@@ -46,7 +46,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.HolderPopular>
     public void onBindViewHolder(@NonNull HolderPopular holder, int position) {
         // Get data
         Books book = listBooks.get(position);
-        String bookId = String.valueOf(book.getId());
+        String bookId = book.getId();
         String name = book.getName();
         String img = book.getImg();
 

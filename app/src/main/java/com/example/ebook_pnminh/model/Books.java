@@ -3,13 +3,13 @@ package com.example.ebook_pnminh.model;
 import android.net.Uri;
 
 public class Books {
-    private int id,favorites;
-    private String name,img,author,category,sub;
+    private int favorites;
+    private String name,img,author,id,category,sub;
 
     public Books() {
     }
 
-    public Books(int id, int favorites, String name, String img, String author, String category, String sub) {
+    public Books(String id, int favorites, String name, String img, String author, String category, String sub) {
         this.id = id;
         this.favorites = favorites;
         this.name = name;
@@ -19,11 +19,11 @@ public class Books {
         this.sub = sub;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
