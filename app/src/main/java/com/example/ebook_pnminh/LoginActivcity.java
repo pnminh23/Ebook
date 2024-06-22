@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class LoginActivcity extends AppCompatActivity {
     private TextView tvSignup;
     private Button btnLogin;
+    private TextView tvForgotPassword;
     private ActivityLoginBinding binding;
     private FirebaseAuth  firebaseAuth;
     @Override
@@ -47,6 +48,15 @@ public class LoginActivcity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        // Xử lý khi nhấn vào Quên mật khẩu
+        binding.tvForgotpassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivcity.this, ForgotPasswordActivity.class);
+                startActivity(intent);
+            }
+        });
+
         // Xử lý đăng nhập
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
