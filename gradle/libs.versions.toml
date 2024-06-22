@@ -20,6 +20,10 @@ glide = "5.0.0-rc01"
 imageslideshow = "0.1.2"
 roundedimageview = "2.3.0"
 viewpager2 = "1.1.0"
+androidPdfViewer = "2.8.2"
+androidPdfViewerVersion = "3.2.0-beta.1"
+okhttp = "5.0.0-alpha.14"
+firebaseStorage = "21.0.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -41,6 +45,10 @@ glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "gl
 imageslideshow = { group = "com.github.denzcoskun", name = "ImageSlideshow", version.ref = "imageslideshow" }
 roundedimageview = { group = "com.makeramen", name = "roundedimageview", version.ref = "roundedimageview" }
 viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
+android-pdf-viewer = { group = "com.github.barteksc", name = "android-pdf-viewer", version.ref = "androidPdfViewer" }
+barteksc-android-pdf-viewer = { group = "com.github.barteksc", name = "android-pdf-viewer", version.ref = "androidPdfViewerVersion" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -43,7 +43,14 @@ public class BookActivity extends AppCompatActivity {
                 getOnBackPressedDispatcher().onBackPressed();
             }
         });
-
+        binding.btnReadNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BookActivity.this, ReadBookActivity.class);
+                intent.putExtra("bookId",bookId);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -59,7 +66,7 @@ public class BookActivity extends AppCompatActivity {
                 String favorites = ""+snapshot.child("favorites").getValue();
                 String img = ""+snapshot.child("img").getValue();
                 String sub = ""+snapshot.child("sub").getValue();
-                Log.d("Firebase1", "Book added: " + ""+snapshot.child("name").getValue());
+//                Log.d("Firebase1", "Book added: " + ""+snapshot.child("name").getValue());
                 // set data
                 binding.txtTitle.setText(name);
                 binding.txtAuthor.setText(author);
