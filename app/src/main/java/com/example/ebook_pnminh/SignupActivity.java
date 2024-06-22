@@ -70,6 +70,7 @@ public class SignupActivity extends AppCompatActivity {
         email = binding.edtEmail.getText().toString().trim();
         password = binding.edtPassword.getText().toString().trim();
         String cpassword = binding.edtConfrim.getText().toString().trim();
+
         // validate dữ liệu
         if (TextUtils.isEmpty(name)||TextUtils.isEmpty(email)||TextUtils.isEmpty(password)||TextUtils.isEmpty(cpassword)){
             Toast.makeText(this,"Vui lòng nhập dầy đủ thông tin",Toast.LENGTH_SHORT).show();
