@@ -4,27 +4,20 @@ import android.net.Uri;
 
 public class Books {
     private int favorites;
-    private String name,img,author,id,category,sub;
+    private String name, img, author, id, category, sub, pdf;
 
     public Books() {
     }
 
-    public Books(String id, int favorites, String name, String img, String author, String category, String sub) {
-        this.id = id;
+    public Books(int favorites, String name, String img, String author, String id, String category, String sub, String pdf) {
         this.favorites = favorites;
         this.name = name;
         this.img = img;
         this.author = author;
+        this.id = id;
         this.category = category;
         this.sub = sub;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+        this.pdf = pdf;
     }
 
     public int getFavorites() {
@@ -59,6 +52,14 @@ public class Books {
         this.author = author;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getCategory() {
         return category;
     }
@@ -73,5 +74,13 @@ public class Books {
 
     public void setSub(String sub) {
         this.sub = sub;
+    }
+
+    public String getPdf() {
+        return pdf;
+    }
+
+    public void setPdf(String pdf) {
+        this.pdf = pdf;
     }
 }
