@@ -1,5 +1,6 @@
 package com.example.ebook_pnminh.Home;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,16 +15,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.interfaces.ItemClickListener;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.ebook_pnminh.Adapter.BookAdapter;
 import com.example.ebook_pnminh.Adapter.CategoryAdapter;
+import com.example.ebook_pnminh.BookActivity;
 import com.example.ebook_pnminh.R;
 import com.example.ebook_pnminh.databinding.FragmentDiscoverBinding;
 import com.example.ebook_pnminh.model.Books;
 import com.example.ebook_pnminh.model.Category;
+import com.example.ebook_pnminh.model.SlideItem;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -148,15 +153,42 @@ public class DiscoverFragment extends Fragment {
 
 
     private void loadBookSlide() {
-        final List<SlideModel> remoteImage = new ArrayList<>();
+        final List<SlideItem> remoteImage = new ArrayList<>();
         FirebaseDatabase.getInstance().getReference().child("Book")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot ds : snapshot.getChildren()){
-                            remoteImage.add(new SlideModel(ds.child("img").getValue().toString(),ds.child("name").getValue().toString(), ScaleTypes.CENTER_INSIDE));
+                            String id = ds.child("id").getValue().toString();
+                            SlideModel slideModel = new SlideModel(
+                                    ds.child("img").getValue().toString(),
+                                    ds.child("name").getValue().toString(),
+                                    ScaleTypes.CENTER_INSIDE
+                            );
+                            remoteImage.add(new SlideItem(id, slideModel));
+
                         }
-                        imageSlider.setImageList(remoteImage,ScaleTypes.CENTER_INSIDE);
+                        List<SlideModel> slideModels = new ArrayList<>();
+                        for (SlideItem item : remoteImage) {
+                            slideModels.add(item.getSlideModel());
+                        }
+                        imageSlider.setImageList(slideModels, ScaleTypes.CENTER_INSIDE);
+
+                        // Set item click listener
+                        imageSlider.setItemClickListener(new ItemClickListener() {
+                            @Override
+                            public void onItemSelected(int i) {
+                                String bookId = remoteImage.get(i).getId();
+                                Intent intent = new Intent(getContext(), BookActivity.class);
+                                intent.putExtra("bookId",bookId);
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void doubleClick(int i) {
+
+                            }
+                        });
                     }
 
                     @Override
@@ -167,9 +199,7 @@ public class DiscoverFragment extends Fragment {
 
     }
 
-    // Định nghĩa một giao diện callback
-    public interface FirebaseCallback {
-        void onCallback(List<Books> listBooks);
-    }
+
+
 
 }

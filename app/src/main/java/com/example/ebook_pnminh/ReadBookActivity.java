@@ -3,6 +3,7 @@ package com.example.ebook_pnminh;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -55,7 +56,12 @@ public class ReadBookActivity extends AppCompatActivity {
         client = new OkHttpClient();
         loadBook();
         setContentView(binding.getRoot());
-
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
 
     }
 

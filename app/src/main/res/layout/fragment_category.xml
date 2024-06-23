@@ -23,10 +23,12 @@
             android:text="Thể Loại"
             android:textSize="15dp" />
         <TextView
+            android:id="@+id/search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/search"
             android:text=""
+            android:layout_marginRight="10dp"
             android:layout_alignParentRight="true" />
     </RelativeLayout>
 

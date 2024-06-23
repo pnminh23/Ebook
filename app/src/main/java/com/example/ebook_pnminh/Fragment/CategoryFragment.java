@@ -9,13 +9,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.ebook_pnminh.CategoryActivity;
 import com.example.ebook_pnminh.R;
+import com.example.ebook_pnminh.SearchActivity;
 
 
 public class CategoryFragment extends Fragment {
     private View categoryView;
+    private TextView search;
     private ImageView tinhcamlangman,hoikydanhnha,lichsu,vanhocnuocngoai,kynangmem,trinhtham,nuoidaycon,kinhte,khoahoc,tuoihoctro;
 
     @Override
@@ -33,6 +36,13 @@ public class CategoryFragment extends Fragment {
         kinhte = categoryView.findViewById(R.id.img_kinhtetaichinh);
         khoahoc = categoryView.findViewById(R.id.img_khoahocvientuong);
         tuoihoctro = categoryView.findViewById(R.id.img_tuoihoctro);
+        search = categoryView.findViewById(R.id.search);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), SearchActivity.class));
+            }
+        });
         tinhcamlangman.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
