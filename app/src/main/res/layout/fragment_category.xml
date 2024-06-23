@@ -43,12 +43,14 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/img_tinhcamlangman"
                 android:layout_width="180dp"
                 android:layout_height="120dp"
                 android:layout_weight="1"
                 android:src="@drawable/tinh_cam_lang_man" />
 
             <ImageView
+                android:id="@+id/img_hoikidanhnhan"
                 android:layout_width="180dp"
                 android:layout_height="120dp"
                 android:layout_weight="1"
@@ -64,12 +66,14 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/img_lichsuchinhtri"
                 android:layout_width="180dp"
                 android:layout_height="120dp"
                 android:layout_weight="1"
                 android:src="@drawable/lich_su_chinh_tri" />
 
             <ImageView
+                android:id="@+id/img_vanhocnuocngoai"
                 android:layout_width="180dp"
                 android:layout_height="120dp"
                 android:layout_weight="1"
@@ -85,12 +89,14 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/img_kynangmem"
                 android:layout_width="180dp"
                 android:layout_height="120dp"
                 android:layout_weight="1"
                 android:src="@drawable/ky_nang_mem" />
 
             <ImageView
+                android:id="@+id/img_trinhthamkinhdi"
                 android:layout_width="180dp"
                 android:layout_height="120dp"
                 android:layout_weight="1"
@@ -106,12 +112,14 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/img_nuoidaycon"
                 android:layout_width="180dp"
                 android:layout_height="120dp"
                 android:layout_weight="1"
                 android:src="@drawable/nuoi_day_con" />
 
             <ImageView
+                android:id="@+id/img_kinhtetaichinh"
                 android:layout_width="180dp"
                 android:layout_height="120dp"
                 android:layout_weight="1"
@@ -127,12 +135,14 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/img_khoahocvientuong"
                 android:layout_width="180dp"
                 android:layout_height="120dp"
                 android:layout_weight="1"
                 android:src="@drawable/khoa_hoc_vien_tuong" />
 
             <ImageView
+                android:id="@+id/img_tuoihoctro"
                 android:layout_width="180dp"
                 android:layout_height="120dp"
                 android:layout_weight="1"
