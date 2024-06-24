@@ -1,9 +1,12 @@
 package com.example.ebook_pnminh;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -47,6 +50,8 @@ public class ReadBookActivity extends AppCompatActivity {
     ActivityReadBookBinding binding;
     String bookId;
     private OkHttpClient client;
+    int pageCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +67,12 @@ public class ReadBookActivity extends AppCompatActivity {
                 getOnBackPressedDispatcher().onBackPressed();
             }
         });
-
+        binding.btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSearchDialog();
+            }
+        });
     }
 
     private void loadBook() {
@@ -95,6 +105,7 @@ public class ReadBookActivity extends AppCompatActivity {
                 binding.pdfView.fromBytes(bytes).swipeHorizontal(false).onPageChange(new OnPageChangeListener() {
                     @Override
                     public void onPageChanged(int page, int pageCount) {
+                        ReadBookActivity.this.pageCount = pageCount;
                         int currentPage = (page+1);
                         binding.pageCount.setText(currentPage+"/"+pageCount);
                     }
@@ -113,5 +124,31 @@ public class ReadBookActivity extends AppCompatActivity {
             }
         });
         Log.d("Firebaserefernce", "Book added: " + reference.getBytes(50000000));
+    }
+    private void showSearchDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.layout_dialog_search);
+        dialog.setTitle("Search Page");
+
+        EditText pageNumberEditText = dialog.findViewById(R.id.pageNumberEditText);
+        Button searchButton = dialog.findViewById(R.id.dialogSearchButton);
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String pageNumberStr = pageNumberEditText.getText().toString();
+                if (!pageNumberStr.isEmpty()) {
+                    int pageNumber = Integer.parseInt(pageNumberStr);
+                    if (pageNumber > 0 && pageNumber <= pageCount) {
+                        binding.pdfView.jumpTo(pageNumber +1);
+                        dialog.dismiss();
+                    } else {
+                        Toast.makeText(ReadBookActivity.this, "Invalid page number", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
+        dialog.show();
     }
 }
