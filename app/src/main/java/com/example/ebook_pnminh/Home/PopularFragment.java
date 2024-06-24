@@ -19,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -27,8 +28,8 @@ import java.util.List;
 
 public class PopularFragment extends Fragment {
 
-    private List<Books> booksPopular;
-    private BookAdapter adapterPopular;
+    private List<Books> listBooks;
+    private BookAdapter bookAdapter;
     FragmentPopularBinding binding;
 
 
@@ -50,31 +51,37 @@ public class PopularFragment extends Fragment {
     }
 
     private void loadPopular() {
-        booksPopular = new ArrayList<>();
+        listBooks = new ArrayList<>();
+
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Book");
-        reference.addValueEventListener(new ValueEventListener() {
+        Query query = reference.orderByChild("favorites");
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                Log.d("Firebase", "onDataChange called");
-                booksPopular.clear();
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    Books book = ds.getValue(Books.class);
-                    if (book != null) {
-                        booksPopular.add(book);
-//                        Log.d("Firebase", "Book added: " + book.getName());
+                Log.d("Firebase", "onDataChange called");
+                listBooks.clear();
+                for (DataSnapshot ds : snapshot.getChildren()){
+                    Books books = ds.getValue(Books.class);
+                    if (books != null) {
+                        listBooks.add(0,books);
+
+                        Log.d("Firebase", "Book added: " + books.getName());
+
                     }
-//                    else {
-//                        Log.d("Firebase", "Book is null");
-//                    }
+                    else {
+                        Log.d("Firebase", "Book is null");
+                    }
+
                 }
-                adapterPopular = new BookAdapter(getContext(), booksPopular);
-                binding.recycelView.setAdapter(adapterPopular);
-//                Log.d("Firebase", "Adapter set with " + booksPopular.size() + " items");
+                bookAdapter = new BookAdapter(getContext(),listBooks);
+                binding.recycelView.setAdapter(bookAdapter);
+
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("Firebase", "Error: " + error.getMessage());
+
             }
         });
     }

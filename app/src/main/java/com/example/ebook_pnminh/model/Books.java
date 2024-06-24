@@ -5,11 +5,12 @@ import android.net.Uri;
 public class Books {
     private int favorites;
     private String name, img, author, id, category, sub, pdf;
+    private String timestamp;
 
     public Books() {
     }
 
-    public Books(int favorites, String name, String img, String author, String id, String category, String sub, String pdf) {
+    public Books(int favorites, String name, String img, String author, String id, String category, String sub, String pdf, String timestamp) {
         this.favorites = favorites;
         this.name = name;
         this.img = img;
@@ -18,6 +19,7 @@ public class Books {
         this.category = category;
         this.sub = sub;
         this.pdf = pdf;
+        this.timestamp = timestamp;
     }
 
     public int getFavorites() {
@@ -82,5 +84,13 @@ public class Books {
 
     public void setPdf(String pdf) {
         this.pdf = pdf;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 }

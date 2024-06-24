@@ -140,7 +140,7 @@ public class ReadBookActivity extends AppCompatActivity {
                 if (!pageNumberStr.isEmpty()) {
                     int pageNumber = Integer.parseInt(pageNumberStr);
                     if (pageNumber > 0 && pageNumber <= pageCount) {
-                        binding.pdfView.jumpTo(pageNumber +1);
+                        binding.pdfView.jumpTo(pageNumber -1);
                         dialog.dismiss();
                     } else {
                         Toast.makeText(ReadBookActivity.this, "Invalid page number", Toast.LENGTH_SHORT).show();
