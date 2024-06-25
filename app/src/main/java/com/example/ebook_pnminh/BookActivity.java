@@ -37,6 +37,7 @@ public class BookActivity extends AppCompatActivity {
         bookId = intent.getStringExtra("bookId");
 
         loadBookDetail();
+        defaultButonFavorites();
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,6 +63,37 @@ public class BookActivity extends AppCompatActivity {
         });
 
     }
+
+    private void defaultButonFavorites() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BookFavorites");
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String favoriteKey = null;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String currentUid = snapshot.child("uid").getValue(String.class);
+                    String currentBookId = snapshot.child("bookId").getValue(String.class);
+                    if (currentUid.equals(uid) && currentBookId.equals(bookId)) {
+                        favoriteKey = snapshot.getKey();;
+                        break;
+                    }
+                }
+
+                if (favoriteKey != null) {
+                    binding.btnFavorite.setImageResource(R.drawable.img);
+                } else {
+                    binding.btnFavorite.setImageResource(R.drawable.img_3);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(BookActivity.this, "Lỗi kiểm tra dữ liệu", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void checkBookFavorites(String uid, String bookId) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BookFavorites");
 
@@ -79,9 +111,12 @@ public class BookActivity extends AppCompatActivity {
                 }
 
                 if (favoriteKey != null) {
+                    binding.btnFavorite.setImageResource(R.drawable.img_3);
+
                     deleteBookFavorite(favoriteKey);
                     Toast.makeText(BookActivity.this, "Sách đã có trong danh sách yêu thích", Toast.LENGTH_SHORT).show();
                 } else {
+                    binding.btnFavorite.setImageResource(R.drawable.img);
                     Toast.makeText(BookActivity.this, "Sách chưa có trong danh sách yêu thích", Toast.LENGTH_SHORT).show();
                     addBookFavorites(uid, bookId);
                 }
