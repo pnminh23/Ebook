@@ -4,17 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.example.ebook_pnminh.Adapter.BookAdapter;
+import com.example.ebook_pnminh.Singleton.UidManager;
 import com.example.ebook_pnminh.databinding.ActivityBookBinding;
-import com.example.ebook_pnminh.model.Books;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,12 +20,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class BookActivity extends AppCompatActivity {
     private ActivityBookBinding binding;
-    String bookId;
+    String bookId = "";
+    String uid = UidManager.getInstance().getUid();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +35,7 @@ public class BookActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         Intent intent = getIntent();
         bookId = intent.getStringExtra("bookId");
+
         loadBookDetail();
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,9 +51,150 @@ public class BookActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        int indexBookFavorites = 1;
+        binding.btnFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkBookFavorites(uid,bookId);
+
+
+            }
+        });
 
     }
+    private void checkBookFavorites(String uid, String bookId) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BookFavorites");
 
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String favoriteKey = null;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String currentUid = snapshot.child("uid").getValue(String.class);
+                    String currentBookId = snapshot.child("bookId").getValue(String.class);
+                    if (currentUid.equals(uid) && currentBookId.equals(bookId)) {
+                        favoriteKey = snapshot.getKey();;
+                        break;
+                    }
+                }
+
+                if (favoriteKey != null) {
+                    deleteBookFavorite(favoriteKey);
+                    Toast.makeText(BookActivity.this, "Sách đã có trong danh sách yêu thích", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(BookActivity.this, "Sách chưa có trong danh sách yêu thích", Toast.LENGTH_SHORT).show();
+                    addBookFavorites(uid, bookId);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(BookActivity.this, "Lỗi kiểm tra dữ liệu", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void updateAddFavorites() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Book").child(bookId);
+        reference.child("favorites").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                long currentCount = 0;
+                if (snapshot.exists()) {
+                    currentCount = snapshot.getValue(Long.class);
+                }
+                long newCount = currentCount + 1;
+                reference.child("favorites").setValue(newCount).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        binding.txtFavoriteCount.setText(""+newCount);
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    private void updateDeleteFavorites() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Book").child(bookId);
+        reference.child("favorites").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                long currentCount = 0;
+                if (snapshot.exists()) {
+                    currentCount = snapshot.getValue(Long.class);
+                }
+                long newCount = currentCount - 1;
+                reference.child("favorites").setValue(newCount).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        binding.txtFavoriteCount.setText(""+newCount);
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void addBookFavorites(String uid, String bookId) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BookFavorites");
+
+        // Lấy số lượng khóa hiện tại
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                long count = dataSnapshot.getChildrenCount();
+                long newKey = count + 1; // Khóa mới sẽ là count + 1
+
+                // Tạo HashMap để lưu dữ liệu
+                HashMap<String, Object> hashMap = new HashMap<>();
+                hashMap.put("uid", uid);
+                hashMap.put("bookId", bookId);
+
+                // Thêm dữ liệu vào Firebase với khóa mới
+                ref.child(String.valueOf(newKey)).setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        updateAddFavorites();
+                        Toast.makeText(BookActivity.this, "Thêm sách thành công", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(BookActivity.this, "Thêm sách thất bại", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(BookActivity.this, "Lấy dữ liệu thất bại", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+    private void deleteBookFavorite(String favoriteKey) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BookFavorites").child(favoriteKey);
+
+        ref.removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                updateDeleteFavorites();
+                Toast.makeText(BookActivity.this, "Xóa sách khỏi danh sách yêu thích thành công", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(BookActivity.this, "Xóa sách khỏi danh sách yêu thích thất bại", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     private void loadBookDetail() {
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Book");
@@ -66,6 +207,7 @@ public class BookActivity extends AppCompatActivity {
                 String favorites = ""+snapshot.child("favorites").getValue();
                 String img = ""+snapshot.child("img").getValue();
                 String sub = ""+snapshot.child("sub").getValue();
+                String timestamp = ""+snapshot.child("timestamp").getValue();
 //                Log.d("Firebase1", "Book added: " + ""+snapshot.child("name").getValue());
                 // set data
                 binding.txtTitle.setText(name);
@@ -73,6 +215,7 @@ public class BookActivity extends AppCompatActivity {
                 binding.txtDescription.setText(sub);
                 Picasso.get().load(img).into(binding.imgBookCover);
                 binding.txtFavoriteCount.setText(favorites);
+                binding.txtTime.setText(timestamp);
             }
 
             @Override

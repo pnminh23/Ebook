@@ -17,11 +17,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 
+import com.example.ebook_pnminh.Singleton.UidManager;
 import com.example.ebook_pnminh.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivcity extends AppCompatActivity {
     private TextView tvSignup;
@@ -58,9 +60,17 @@ public class LoginActivcity extends AppCompatActivity {
         });
 
         // Xử lý đăng nhập
+
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    String uid = user.getUid();
+                    // Lưu email vào UserManager
+                    UidManager.getInstance().setUid(uid);
+                    // Xử lý logic khác sau khi đăng ký thành công (nếu cần)
+                }
                 validatedata();
             }
         });
