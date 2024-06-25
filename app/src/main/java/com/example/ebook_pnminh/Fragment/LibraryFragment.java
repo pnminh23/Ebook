@@ -21,6 +21,7 @@ import com.example.ebook_pnminh.Singleton.UidManager;
 import com.example.ebook_pnminh.databinding.FragmentLibraryBinding;
 import com.example.ebook_pnminh.databinding.FragmentPopularBinding;
 import com.example.ebook_pnminh.model.Books;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,7 +36,7 @@ public class LibraryFragment extends Fragment {
     FragmentLibraryBinding binding;
     private BookAdapter bookAdapter;
     private List<Books> listBooks;
-    String uid = UidManager.getInstance().getUid();
+    String uid = FirebaseAuth.getInstance().getUid();
 
 
     @Override

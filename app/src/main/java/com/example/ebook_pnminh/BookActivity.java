@@ -13,6 +13,7 @@ import com.example.ebook_pnminh.Singleton.UidManager;
 import com.example.ebook_pnminh.databinding.ActivityBookBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,7 +26,7 @@ import java.util.HashMap;
 public class BookActivity extends AppCompatActivity {
     private ActivityBookBinding binding;
     String bookId = "";
-    String uid = UidManager.getInstance().getUid();
+    String uid = FirebaseAuth.getInstance().getUid();
 
 
     @Override
@@ -82,8 +83,11 @@ public class BookActivity extends AppCompatActivity {
 
                 if (favoriteKey != null) {
                     binding.btnFavorite.setImageResource(R.drawable.img);
+
+
                 } else {
                     binding.btnFavorite.setImageResource(R.drawable.img_3);
+
                 }
             }
 
@@ -117,8 +121,9 @@ public class BookActivity extends AppCompatActivity {
                     Toast.makeText(BookActivity.this, "Sách đã có trong danh sách yêu thích", Toast.LENGTH_SHORT).show();
                 } else {
                     binding.btnFavorite.setImageResource(R.drawable.img);
-                    Toast.makeText(BookActivity.this, "Sách chưa có trong danh sách yêu thích", Toast.LENGTH_SHORT).show();
                     addBookFavorites(uid, bookId);
+                    Toast.makeText(BookActivity.this, "Sách chưa có trong danh sách yêu thích", Toast.LENGTH_SHORT).show();
+
                 }
             }
 

@@ -16,11 +16,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.ebook_pnminh.Singleton.UidManager;
 import com.example.ebook_pnminh.databinding.ActivityReadBookBinding;
 import com.github.barteksc.pdfviewer.listener.OnErrorListener;
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
 import com.github.barteksc.pdfviewer.listener.OnPageErrorListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,6 +53,9 @@ public class ReadBookActivity extends AppCompatActivity {
     String bookId;
     private OkHttpClient client;
     int pageCount;
+    int currentPage=0;
+
+    String uid = FirebaseAuth.getInstance().getUid();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +76,13 @@ public class ReadBookActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showSearchDialog();
+            }
+        });
+        binding.btnSavePage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentPage = binding.pdfView.getCurrentPage();
+
             }
         });
     }

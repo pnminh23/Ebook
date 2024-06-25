@@ -3,6 +3,7 @@ package com.example.ebook_pnminh;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -69,6 +70,8 @@ public class LoginActivcity extends AppCompatActivity {
                     String uid = user.getUid();
                     // Lưu email vào UserManager
                     UidManager.getInstance().setUid(uid);
+                    Log.d("getUID", "onDataChange: "+ uid);
+
                     // Xử lý logic khác sau khi đăng ký thành công (nếu cần)
                 }
                 validatedata();
