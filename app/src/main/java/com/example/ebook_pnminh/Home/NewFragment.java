@@ -42,13 +42,13 @@ public class NewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentNewBinding.inflate(inflater, container, false);
-        loadPopular();
+        loadNewBooks();
         binding.recycelViewNew.setLayoutManager(new GridLayoutManager(getContext(),3));
 
         return binding.getRoot();
     }
 
-    private void loadPopular() {
+    private void loadNewBooks() {
         listBooks = new ArrayList<>();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Book");
         reference.addValueEventListener(new ValueEventListener() {

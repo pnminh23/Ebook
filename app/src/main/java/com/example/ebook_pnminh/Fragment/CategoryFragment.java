@@ -63,7 +63,7 @@ public class CategoryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), CategoryActivity.class);
-                intent.putExtra("category","Lịch sử - chính trị");
+                intent.putExtra("category","Lịch sử - Chính trị");
                 startActivity(intent);
             }
         });
