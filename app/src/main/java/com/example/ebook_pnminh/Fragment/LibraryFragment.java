@@ -37,6 +37,7 @@ public class LibraryFragment extends Fragment {
     private BookAdapter bookAdapter;
     private List<Books> listBooks;
     String uid = FirebaseAuth.getInstance().getUid();
+    List<String> bookIds ;
 
 
     @Override
@@ -47,6 +48,7 @@ public class LibraryFragment extends Fragment {
         binding.recycelViewFvr.setLayoutManager(new GridLayoutManager(getContext(),3));
         listBooks = new ArrayList<>();
         bookAdapter = new BookAdapter(getContext(), listBooks);
+
         binding.recycelViewFvr.setAdapter(bookAdapter);
         loadFavoritesBook();
         binding.btnSearch.setOnClickListener(new View.OnClickListener() {
@@ -61,12 +63,13 @@ public class LibraryFragment extends Fragment {
     }
 
     private void loadFavoritesBook() {
+        bookIds = new ArrayList<>();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BookFavorites");
 
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<String> bookIds = new ArrayList<>();
+                bookIds.clear();
                 for (DataSnapshot sp : snapshot.getChildren()) {
                     String currentUid = sp.child("uid").getValue(String.class);
                     if (currentUid != null && currentUid.equals(uid)) {
@@ -90,7 +93,8 @@ public class LibraryFragment extends Fragment {
     private void fetchBooksFromIds(List<String> bookIds) {
         Log.d("Library", "fetchBooksFromIds: "+ bookIds);
         DatabaseReference booksRef = FirebaseDatabase.getInstance().getReference("Book"); // Giả sử bạn có một node "Books"
-
+        listBooks.clear(); // Xóa danh sách sách hiện tại trước khi thêm sách mới
+        bookAdapter.notifyDataSetChanged();
         for (String bookId : bookIds) {
             booksRef.child(""+bookId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
