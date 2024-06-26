@@ -1,11 +1,15 @@
 package com.example.ebook_pnminh;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Patterns;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,19 +32,53 @@ public class SignupActivity extends AppCompatActivity {
     private TextView tvLogin;
     private Button btnSignup;
     private ActivitySignupBinding binding;
+    EditText edtPassword ;
+    EditText edtConfirm ;
+    private boolean isPasswordVisible = false;
 
     //Khai báo firebase
     //FirebaseAuth là một dịch vụ của Firebase giúp xác thực người dùng trong ứng dụng Android
     private FirebaseAuth firebaseAuth;
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySignupBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         tvLogin = findViewById(R.id.tv_Login);
+        edtPassword = binding.edtPassword;
+        edtConfirm = binding.edtConfrim;
         btnSignup = findViewById(R.id.btn_Signup);
         // init firebase Auth
         firebaseAuth = FirebaseAuth.getInstance();
+        edtPassword.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_RIGHT = 2;
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (edtPassword.getRight() - edtPassword.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        if (isPasswordVisible) {
+                            // Ẩn mật khẩu
+                            edtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            edtConfirm.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            edtPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye_off, 0);
+                        } else {
+                            // Hiển thị mật khẩu
+                            edtPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+                            edtConfirm.setInputType(InputType.TYPE_CLASS_TEXT);
+
+                            edtPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye_on, 0);
+                        }
+                        // Đặt con trỏ tại cuối văn bản
+                        edtPassword.setSelection(edtPassword.getText().length());
+                        edtConfirm.setSelection(edtConfirm.getText().length());
+                        isPasswordVisible = !isPasswordVisible;
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
 
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -66,6 +66,9 @@
             android:layout_gravity="center"
             android:hint="Mật Khẩu"
             android:inputType="textPassword"
+            android:drawableRight="@drawable/ic_eye_off"
+            android:drawablePadding="20dp"
+            android:paddingEnd="15dp"
             android:textSize="15dp"
             android:fontFamily="@font/inter_regular"/>
         <EditText
@@ -78,6 +81,7 @@
             android:layout_gravity="center"
             android:hint="Nhập lại mật khẩu"
             android:inputType="textPassword"
+
             android:textSize="15dp"
             android:fontFamily="@font/inter_regular"/>
         <Button
