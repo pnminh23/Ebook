@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.ebook_pnminh.LoginActivcity;
 import com.example.ebook_pnminh.R;
 import com.example.ebook_pnminh.Setting.Profile;
@@ -87,39 +88,6 @@ public class SettingFragment extends Fragment {
             }
         });
 
-        // Set onClickListener for Profile image button
-        imgAvatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGallery();
-            }
-        });
-
-        // Load user profile data from Firestore
-        if (currentUser != null) {
-            DocumentReference userRef = db.collection("users").document(currentUser.getUid());
-            userListener = userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                    if (e != null) {
-                        // Handle errors
-                        Toast.makeText(getContext(), "Error while loading user data.", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if (documentSnapshot != null && documentSnapshot.exists()) {
-                        // Retrieve user data
-                        String userName = documentSnapshot.getString("name");
-                        String userEmail = documentSnapshot.getString("email");
-
-                        // Update UI
-                        tvUserName.setText(userName);
-                        tvEmail.setText(userEmail);
-                    }
-                }
-            });
-        }
-
         RelativeLayout deleteAccountButton = view.findViewById(R.id.Delete_Account);
         deleteAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,30 +97,52 @@ public class SettingFragment extends Fragment {
             }
         });
 
+        // Load user info
+        showUserInfo();
+
         return view;
+    }
+
+    // Method to load and display user information
+    private void showUserInfo() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String name = user.getDisplayName();
+            String email = user.getEmail();
+            Uri photoUrl = user.getPhotoUrl();
+
+            if (name == null || name.isEmpty()) {
+                tvUserName.setVisibility(View.GONE);
+            } else {
+                tvUserName.setVisibility(View.VISIBLE);
+                tvUserName.setText(name);
+            }
+
+            tvEmail.setText(email);
+            Glide.with(this).load(photoUrl).error(R.drawable.anh_dai_dien).into(imgAvatar);
+        }
     }
 
     // Method to delete user account
     private void deleteUserAccount(int gravity) {
-        final Dialog dialog = new Dialog(this.getContext());
+        final Dialog dialog = new Dialog(requireContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.fragment_delete_account);
 
         Window window = dialog.getWindow();
-        if (window == null) {
-            return;
-        }
-        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        window.setGravity(gravity);
+        if (window != null) {
+            window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            window.setGravity(gravity);
 
-        WindowManager.LayoutParams windowAttributes = window.getAttributes();
-        windowAttributes.gravity = Gravity.CENTER;
-        window.setAttributes(windowAttributes);
+            WindowManager.LayoutParams windowAttributes = window.getAttributes();
+            windowAttributes.gravity = Gravity.CENTER;
+            window.setAttributes(windowAttributes);
 
-        if (Gravity.CENTER == gravity) {
-            dialog.setCancelable(true);
-        } else {
-            dialog.setCancelable(false);
+            if (Gravity.CENTER == gravity) {
+                dialog.setCancelable(true);
+            } else {
+                dialog.setCancelable(false);
+            }
         }
 
         Button cancelButton = dialog.findViewById(R.id.cancel_button);
@@ -189,26 +179,6 @@ public class SettingFragment extends Fragment {
 
         dialog.show();
     }
-
-    // Open gallery for selecting image
-    private void openGallery() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK && data != null && data.getData() != null) {
-            Uri imageUri = data.getData();
-
-            // Load image into ImageView using Glide or Picasso
-            // Example with Picasso:
-            // Picasso.get().load(imageUri).into(imgAvatar);
-            // Here, you can also upload the imageUri to Firebase Storage or process it further as per your app's requirements.
-        }
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
