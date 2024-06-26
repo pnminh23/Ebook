@@ -67,7 +67,7 @@ public class LoginActivcity extends AppCompatActivity {
 
                 FirebaseUser user = firebaseAuth.getCurrentUser();
 
-                validatedata();
+
 
             }
         });
@@ -95,7 +95,6 @@ public class LoginActivcity extends AppCompatActivity {
                         FirebaseUser user = firebaseAuth.getCurrentUser();
                         if (user != null) {
                             String uid = user.getUid();
-                            UidManager.getInstance().setUid(uid);
                             updateUserDatabase(uid, email, password);
                         }
                         Intent intent = new Intent(LoginActivcity.this, MainActivity.class);
