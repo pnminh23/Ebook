@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.example.ebook_pnminh.Adapter.BookAdapter;
 import com.example.ebook_pnminh.R;
 import com.example.ebook_pnminh.SearchActivity;
-import com.example.ebook_pnminh.Singleton.UidManager;
+
 import com.example.ebook_pnminh.databinding.FragmentLibraryBinding;
 import com.example.ebook_pnminh.databinding.FragmentPopularBinding;
 import com.example.ebook_pnminh.model.Books;

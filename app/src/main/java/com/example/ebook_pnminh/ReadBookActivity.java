@@ -69,7 +69,6 @@ public class ReadBookActivity extends AppCompatActivity {
         Log.d("bookId", "onCreate: " + bookId);
         client = new OkHttpClient();
         loadBook();
-//        jumpPage();
         setContentView(binding.getRoot());
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +91,35 @@ public class ReadBookActivity extends AppCompatActivity {
 
             }
         });
+        binding.btnNextIntro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nextIntro(bookId);
+            }
+        });
+
     }
+
+    private void nextIntro(String bookId) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Book").child(bookId);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String pageIntro = ""+snapshot.child("pageIntro").getValue();
+                int nextPage = Integer.parseInt(pageIntro)-1;
+                if(nextPage!=0){
+                    binding.pdfView.jumpTo(nextPage);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
     private void checkPage(){
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BookSavePage");
 
@@ -138,7 +165,6 @@ public class ReadBookActivity extends AppCompatActivity {
             }
         });
     }
-
     private void updateSavePage( String savePageKey) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BookSavePage").child(savePageKey);
         ref.child("savePage").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -154,7 +180,6 @@ public class ReadBookActivity extends AppCompatActivity {
             }
         });
     }
-
     private void jumpPage() {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BookSavePage");
 
@@ -189,7 +214,6 @@ public class ReadBookActivity extends AppCompatActivity {
             }
         });
     }
-
     private void addSavePageToUid(String uid, String bookId, int currentPage) {
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BookSavePage");
@@ -206,7 +230,6 @@ public class ReadBookActivity extends AppCompatActivity {
 
 
     }
-
     private void loadBook() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Book");
         reference.child(bookId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -227,8 +250,6 @@ public class ReadBookActivity extends AppCompatActivity {
             }
         });
     }
-
-
     private void displayPdfFromUrl(String pdf){
         StorageReference reference = FirebaseStorage.getInstance().getReferenceFromUrl(pdf);
 

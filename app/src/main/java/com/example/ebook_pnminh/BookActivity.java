@@ -29,9 +29,6 @@ public class BookActivity extends AppCompatActivity {
     private ActivityBookBinding binding;
     String bookId = "";
     String uid = FirebaseAuth.getInstance().getUid();
-//    private BookViewModel bookViewModel;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +36,6 @@ public class BookActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         Intent intent = getIntent();
         bookId = intent.getStringExtra("bookId");
-
         loadBookDetail();
         defaultButonFavorites();
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
@@ -100,7 +96,6 @@ public class BookActivity extends AppCompatActivity {
             }
         });
     }
-
     private void checkBookFavorites(String uid, String bookId) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BookFavorites");
 
@@ -185,7 +180,6 @@ public class BookActivity extends AppCompatActivity {
             }
         });
     }
-
     private void addBookFavorites(String uid, String bookId) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BookFavorites");
         DatabaseReference newRef = ref.push();
