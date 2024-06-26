@@ -18,7 +18,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 
-import com.example.ebook_pnminh.Singleton.UidManager;
+
 import com.example.ebook_pnminh.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -66,14 +66,7 @@ public class LoginActivcity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    String uid = user.getUid();
-                    // Lưu email vào UserManager
-                    UidManager.getInstance().setUid(uid);
-                    Log.d("getUID", "onDataChange: "+ uid);
 
-                    // Xử lý logic khác sau khi đăng ký thành công (nếu cần)
-                }
                 validatedata();
             }
         });

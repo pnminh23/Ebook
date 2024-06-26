@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.ebook_pnminh.Singleton.UidManager;
+
 import com.example.ebook_pnminh.databinding.ActivityBookBinding;
 import com.example.ebook_pnminh.model.BookViewModel;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -188,39 +188,27 @@ public class BookActivity extends AppCompatActivity {
 
     private void addBookFavorites(String uid, String bookId) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BookFavorites");
+        DatabaseReference newRef = ref.push();
+        String newKey = newRef.getKey(); // Lấy khóa mới được tạo
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("uid", uid);
+        hashMap.put("bookId", bookId);
 
-        // Lấy số lượng khóa hiện tại
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        // Thêm dữ liệu vào Firebase với khóa mới
+        ref.child(String.valueOf(newKey)).setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                long count = dataSnapshot.getChildrenCount();
-                long newKey = count + 1; // Khóa mới sẽ là count + 1
-
-                // Tạo HashMap để lưu dữ liệu
-                HashMap<String, Object> hashMap = new HashMap<>();
-                hashMap.put("uid", uid);
-                hashMap.put("bookId", bookId);
-
-                // Thêm dữ liệu vào Firebase với khóa mới
-                ref.child(String.valueOf(newKey)).setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        updateAddFavorites();
-                        Toast.makeText(BookActivity.this, "Thêm sách thành công", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(BookActivity.this, "Thêm sách thất bại", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            public void onSuccess(Void unused) {
+                updateAddFavorites();
+                Toast.makeText(BookActivity.this, "Thêm sách thành công", Toast.LENGTH_SHORT).show();
             }
-
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(BookActivity.this, "Lấy dữ liệu thất bại", Toast.LENGTH_SHORT).show();
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(BookActivity.this, "Thêm sách thất bại", Toast.LENGTH_SHORT).show();
             }
         });
+
+
 
     }
     private void deleteBookFavorite(String favoriteKey) {
