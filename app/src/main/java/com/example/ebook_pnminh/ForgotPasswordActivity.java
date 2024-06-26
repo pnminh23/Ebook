@@ -51,15 +51,16 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Kiểm tra email tồn tại bằng cách gửi email đặt lại mật khẩu
+                // Gửi email đặt lại mật khẩu
                 mAuth.sendPasswordResetEmail(email)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(ForgotPasswordActivity.this, "Email đặt lại mật khẩu đã được gửi", Toast.LENGTH_SHORT).show();
-                                    // Chuyển hướng về trang đăng nhập sau khi email được gửi thành công
+                                    // Chuyển hướng về trang đăng nhập
                                     Intent intent = new Intent(ForgotPasswordActivity.this, LoginActivcity.class);
+                                    intent.putExtra("email", email);
                                     startActivity(intent);
                                     finish(); // Kết thúc Activity hiện tại
                                 } else {
