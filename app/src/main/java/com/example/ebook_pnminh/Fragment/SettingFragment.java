@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,17 +36,14 @@ import com.google.firebase.firestore.ListenerRegistration;
 
 public class SettingFragment extends Fragment {
 
-    private Button profileImageButton;
-    private TextView userNameTextView;
-    private TextView userEmailTextView;
+    private ImageView imgAvatar;
+    private TextView tvUserName, tvEmail;
     private RelativeLayout profileButton;
     private RelativeLayout logoutButton;
-
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private FirebaseUser currentUser;
     private ListenerRegistration userListener;
-
     private static final int PICK_IMAGE_REQUEST = 1;
 
     @Override
@@ -59,9 +58,9 @@ public class SettingFragment extends Fragment {
         currentUser = mAuth.getCurrentUser();
 
         // Initialize Views
-        profileImageButton = view.findViewById(R.id.profile_image_button);
-        userNameTextView = view.findViewById(R.id.tv_user_name);
-        userEmailTextView = view.findViewById(R.id.tv_user_email);
+        imgAvatar = view.findViewById(R.id.img_profile);
+        tvUserName = view.findViewById(R.id.tv_user_name);
+        tvEmail = view.findViewById(R.id.tv_user_email);
         profileButton = view.findViewById(R.id.profile);
         logoutButton = view.findViewById(R.id.logout_section);
 
@@ -89,7 +88,7 @@ public class SettingFragment extends Fragment {
         });
 
         // Set onClickListener for Profile image button
-        profileImageButton.setOnClickListener(new View.OnClickListener() {
+        imgAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openGallery();
@@ -114,52 +113,80 @@ public class SettingFragment extends Fragment {
                         String userEmail = documentSnapshot.getString("email");
 
                         // Update UI
-                        userNameTextView.setText(userName);
-                        userEmailTextView.setText(userEmail);
+                        tvUserName.setText(userName);
+                        tvEmail.setText(userEmail);
                     }
                 }
             });
         }
-        RelativeLayout DeleteAccount = view.findViewById(R.id.Delete_Account);
-        DeleteAccount.setOnClickListener(new View.OnClickListener() {
+
+        RelativeLayout deleteAccountButton = view.findViewById(R.id.Delete_Account);
+        deleteAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Delete user account
                 deleteUserAccount(Gravity.CENTER);
             }
         });
+
         return view;
     }
-    //ham Delete
+
+    // Method to delete user account
     private void deleteUserAccount(int gravity) {
         final Dialog dialog = new Dialog(this.getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.fragment_delete_account);
 
         Window window = dialog.getWindow();
-        if (window == null){
-            return ;
+        if (window == null) {
+            return;
         }
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         window.setGravity(gravity);
 
-
         WindowManager.LayoutParams windowAttributes = window.getAttributes();
         windowAttributes.gravity = Gravity.CENTER;
         window.setAttributes(windowAttributes);
-        if (Gravity.CENTER == gravity){
+
+        if (Gravity.CENTER == gravity) {
             dialog.setCancelable(true);
-        }
-        else {
+        } else {
             dialog.setCancelable(false);
         }
+
         Button cancelButton = dialog.findViewById(R.id.cancel_button);
-        Button comfirmButton = dialog.findViewById(R.id.confirm_button);
+        Button confirmButton = dialog.findViewById(R.id.confirm_button);
+
         cancelButton.setOnClickListener(new View.OnClickListener() {
-              public void onClick(View v) {
-                      dialog.dismiss();
-           }
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
         });
+
+        // Confirm button listener to handle account deletion
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentUser != null) {
+                    currentUser.delete().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getContext(), "Account deleted successfully.", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                            // Redirect to login activity
+                            Intent intent = new Intent(getActivity(), LoginActivcity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            getActivity().finish();
+                        } else {
+                            Toast.makeText(getContext(), "Failed to delete account.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+
         dialog.show();
     }
 
@@ -172,14 +199,12 @@ public class SettingFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK && data != null && data.getData() != null) {
             Uri imageUri = data.getData();
 
-            // Now you can do whatever you want with the imageUri, for example load into ImageView using Glide or Picasso
+            // Load image into ImageView using Glide or Picasso
             // Example with Picasso:
-            // Picasso.get().load(imageUri).into(profileImageButton);
-
+            // Picasso.get().load(imageUri).into(imgAvatar);
             // Here, you can also upload the imageUri to Firebase Storage or process it further as per your app's requirements.
         }
     }

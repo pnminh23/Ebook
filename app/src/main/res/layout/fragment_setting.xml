@@ -29,12 +29,14 @@
         android:orientation="vertical">
 
         <!-- Hình đại diện -->
-        <Button
-            android:id="@+id/profile_image_button"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_profile"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:background="@drawable/anh_dai_dien"
-            android:contentDescription="Profile Image" />
+            android:contentDescription="Profile Image"
+
+            tools:ignore="MissingClass" />
 
         <!-- Tên người dùng -->
         <TextView

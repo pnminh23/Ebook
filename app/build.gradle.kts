@@ -51,10 +51,11 @@ dependencies {
     implementation(libs.imageslideshow)
     implementation(libs.roundedimageview)
     implementation(libs.viewpager2)
-
+    implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation(libs.barteksc.android.pdf.viewer)
     implementation(libs.okhttp)
     implementation(libs.firebase.storage)
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

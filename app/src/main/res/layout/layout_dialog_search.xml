@@ -27,16 +27,16 @@
         android:paddingStart="30dp"
         android:textSize="15sp"
         />
+
     <Button
         android:id="@+id/dialogSearchButton"
-        android:layout_width="80dp"
+        android:layout_width="108dp"
         android:layout_height="50dp"
-        android:fontFamily="@font/inter_regular"
-        android:textSize="18sp"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:backgroundTint="@color/black"
+        android:fontFamily="@font/inter_regular"
         android:text="Tìm"
-        />
+        android:textSize="18sp" />
 
 </LinearLayout>
