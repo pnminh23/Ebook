@@ -3,15 +3,16 @@ package com.example.ebook_pnminh.model;
 import android.net.Uri;
 
 public class Books {
-    private int favorites;
+    private int favorites, pageIntro;
     private String name, img, author, id, category, sub, pdf;
     private String timestamp;
 
     public Books() {
     }
 
-    public Books(int favorites, String name, String img, String author, String id, String category, String sub, String pdf, String timestamp) {
+    public Books(int favorites, int pageIntro, String name, String img, String author, String id, String category, String sub, String pdf, String timestamp) {
         this.favorites = favorites;
+        this.pageIntro = pageIntro;
         this.name = name;
         this.img = img;
         this.author = author;
@@ -28,6 +29,14 @@ public class Books {
 
     public void setFavorites(int favorites) {
         this.favorites = favorites;
+    }
+
+    public int getPageIntro() {
+        return pageIntro;
+    }
+
+    public void setPageIntro(int pageIntro) {
+        this.pageIntro = pageIntro;
     }
 
     public String getName() {

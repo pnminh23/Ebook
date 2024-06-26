@@ -8,11 +8,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.example.ebook_pnminh.Singleton.UidManager;
+
 import com.example.ebook_pnminh.databinding.ActivityBookBinding;
+import com.example.ebook_pnminh.model.BookViewModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,9 +28,7 @@ import java.util.HashMap;
 public class BookActivity extends AppCompatActivity {
     private ActivityBookBinding binding;
     String bookId = "";
-    String uid = UidManager.getInstance().getUid();
-
-
+    String uid = FirebaseAuth.getInstance().getUid();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +36,6 @@ public class BookActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         Intent intent = getIntent();
         bookId = intent.getStringExtra("bookId");
-
         loadBookDetail();
         defaultButonFavorites();
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
@@ -61,7 +61,7 @@ public class BookActivity extends AppCompatActivity {
 
             }
         });
-
+//        bookViewModel = new ViewModelProvider(this).get(BookViewModel.class);
     }
 
     private void defaultButonFavorites() {
@@ -82,8 +82,11 @@ public class BookActivity extends AppCompatActivity {
 
                 if (favoriteKey != null) {
                     binding.btnFavorite.setImageResource(R.drawable.img);
+
+
                 } else {
                     binding.btnFavorite.setImageResource(R.drawable.img_3);
+
                 }
             }
 
@@ -93,7 +96,6 @@ public class BookActivity extends AppCompatActivity {
             }
         });
     }
-
     private void checkBookFavorites(String uid, String bookId) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BookFavorites");
 
@@ -105,7 +107,7 @@ public class BookActivity extends AppCompatActivity {
                     String currentUid = snapshot.child("uid").getValue(String.class);
                     String currentBookId = snapshot.child("bookId").getValue(String.class);
                     if (currentUid.equals(uid) && currentBookId.equals(bookId)) {
-                        favoriteKey = snapshot.getKey();;
+                        favoriteKey = snapshot.getKey();
                         break;
                     }
                 }
@@ -117,8 +119,10 @@ public class BookActivity extends AppCompatActivity {
                     Toast.makeText(BookActivity.this, "Sách đã có trong danh sách yêu thích", Toast.LENGTH_SHORT).show();
                 } else {
                     binding.btnFavorite.setImageResource(R.drawable.img);
-                    Toast.makeText(BookActivity.this, "Sách chưa có trong danh sách yêu thích", Toast.LENGTH_SHORT).show();
+
                     addBookFavorites(uid, bookId);
+                    Toast.makeText(BookActivity.this, "Sách chưa có trong danh sách yêu thích", Toast.LENGTH_SHORT).show();
+
                 }
             }
 
@@ -176,42 +180,29 @@ public class BookActivity extends AppCompatActivity {
             }
         });
     }
-
     private void addBookFavorites(String uid, String bookId) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BookFavorites");
+        DatabaseReference newRef = ref.push();
+        String newKey = newRef.getKey(); // Lấy khóa mới được tạo
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("uid", uid);
+        hashMap.put("bookId", bookId);
 
-        // Lấy số lượng khóa hiện tại
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        // Thêm dữ liệu vào Firebase với khóa mới
+        ref.child(String.valueOf(newKey)).setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                long count = dataSnapshot.getChildrenCount();
-                long newKey = count + 1; // Khóa mới sẽ là count + 1
-
-                // Tạo HashMap để lưu dữ liệu
-                HashMap<String, Object> hashMap = new HashMap<>();
-                hashMap.put("uid", uid);
-                hashMap.put("bookId", bookId);
-
-                // Thêm dữ liệu vào Firebase với khóa mới
-                ref.child(String.valueOf(newKey)).setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        updateAddFavorites();
-                        Toast.makeText(BookActivity.this, "Thêm sách thành công", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(BookActivity.this, "Thêm sách thất bại", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            public void onSuccess(Void unused) {
+                updateAddFavorites();
+                Toast.makeText(BookActivity.this, "Thêm sách thành công", Toast.LENGTH_SHORT).show();
             }
-
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(BookActivity.this, "Lấy dữ liệu thất bại", Toast.LENGTH_SHORT).show();
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(BookActivity.this, "Thêm sách thất bại", Toast.LENGTH_SHORT).show();
             }
         });
+
+
 
     }
     private void deleteBookFavorite(String favoriteKey) {

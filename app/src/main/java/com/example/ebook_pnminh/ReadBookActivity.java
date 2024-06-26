@@ -16,11 +16,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+
 import com.example.ebook_pnminh.databinding.ActivityReadBookBinding;
 import com.github.barteksc.pdfviewer.listener.OnErrorListener;
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
 import com.github.barteksc.pdfviewer.listener.OnPageErrorListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +42,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.HashMap;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -51,6 +55,10 @@ public class ReadBookActivity extends AppCompatActivity {
     String bookId;
     private OkHttpClient client;
     int pageCount;
+    int currentPage=0;
+    int savePage=1;
+
+    String uid = FirebaseAuth.getInstance().getUid();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +66,7 @@ public class ReadBookActivity extends AppCompatActivity {
         binding = ActivityReadBookBinding.inflate(getLayoutInflater());
         Intent intent = getIntent();
         bookId = intent.getStringExtra("bookId");
+        Log.d("bookId", "onCreate: " + bookId);
         client = new OkHttpClient();
         loadBook();
         setContentView(binding.getRoot());
@@ -73,8 +82,154 @@ public class ReadBookActivity extends AppCompatActivity {
                 showSearchDialog();
             }
         });
+        binding.btnSavePage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                checkPage();
+
+
+            }
+        });
+        binding.btnNextIntro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nextIntro(bookId);
+            }
+        });
+
     }
 
+    private void nextIntro(String bookId) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Book").child(bookId);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String pageIntro = ""+snapshot.child("pageIntro").getValue();
+                int nextPage = Integer.parseInt(pageIntro)-1;
+                if(nextPage!=0){
+                    binding.pdfView.jumpTo(nextPage);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    private void checkPage(){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BookSavePage");
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("savePage", "onDataChange: accset");
+                String savePageKey = null;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Log.d("savePage", "onDataChange: for");
+                    String currentUid = ""+snapshot.child("uid").getValue();
+                    String currentBookId = ""+snapshot.child("bookId").getValue();
+                    String currentPageString = ""+snapshot.child("savePage").getValue();
+                    Log.d("savePage", "onDataChange: " + currentPageString);
+
+                    savePage= Integer.parseInt(currentPageString);
+
+                    Log.d("savePage", "onDataChange: " + savePage);
+                    if (currentUid.equals(uid) && currentBookId.equals(bookId)) {
+                        savePageKey = snapshot.getKey();
+                        break;
+                    }
+
+
+                }if(savePageKey != null){
+                     updateSavePage(savePageKey);
+                    Log.d("bookId", "Đã có sách: " );
+
+
+                }
+                else{
+                    currentPage = binding.pdfView.getCurrentPage();
+                    addSavePageToUid(uid,bookId,currentPage);
+                    Log.d("bookId", "chưa có sách: " );
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void updateSavePage( String savePageKey) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BookSavePage").child(savePageKey);
+        ref.child("savePage").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int newcurrentPage = binding.pdfView.getCurrentPage()+1;
+                ref.child("savePage").setValue(newcurrentPage);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    private void jumpPage() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BookSavePage");
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("savePage", "onDataChange: accset");
+                String savePageKey = null;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Log.d("savePage", "onDataChange: for");
+                    String currentUid = ""+snapshot.child("uid").getValue();
+                    String currentBookId = ""+snapshot.child("bookId").getValue();
+                    String currentPageString = ""+snapshot.child("savePage").getValue();
+                    Log.d("savePage", "onDataChange: " + currentPageString);
+
+                    savePage= Integer.parseInt(currentPageString);
+
+                    Log.d("savePage", "onDataChange: " + savePage);
+                    if (currentUid.equals(uid) && currentBookId.equals(bookId)) {
+
+                        binding.pdfView.jumpTo(savePage-1);
+                        break;
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void addSavePageToUid(String uid, String bookId, int currentPage) {
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BookSavePage");
+        DatabaseReference newRef = ref.push();
+        String newKey = newRef.getKey(); // Lấy khóa mới được tạo
+        int tmp = currentPage +1;
+        // Tạo HashMap để lưu dữ liệu
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("uid", uid);
+        hashMap.put("bookId", bookId);
+        hashMap.put("savePage",tmp);
+        ref.child(String.valueOf(newKey)).setValue(hashMap);
+        // Lấy số lượng khóa hiện tại
+
+
+    }
     private void loadBook() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Book");
         reference.child(bookId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -102,6 +257,7 @@ public class ReadBookActivity extends AppCompatActivity {
         reference.getBytes(50000000).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
+
                 binding.pdfView.fromBytes(bytes).swipeHorizontal(false).onPageChange(new OnPageChangeListener() {
                     @Override
                     public void onPageChanged(int page, int pageCount) {
@@ -121,6 +277,7 @@ public class ReadBookActivity extends AppCompatActivity {
 
                     }
                 }).load();
+                jumpPage();
             }
         });
         Log.d("Firebaserefernce", "Book added: " + reference.getBytes(50000000));
@@ -152,3 +309,4 @@ public class ReadBookActivity extends AppCompatActivity {
         dialog.show();
     }
 }
+

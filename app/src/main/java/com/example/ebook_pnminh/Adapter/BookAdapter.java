@@ -63,6 +63,10 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.HolderPopular>
             }
         });
     }
+//    public void updateBooks(List<Books> newBooks) {
+//        this.listBooks = newBooks;
+//        notifyDataSetChanged();
+//    }
 
     @Override
     public int getItemCount() {
