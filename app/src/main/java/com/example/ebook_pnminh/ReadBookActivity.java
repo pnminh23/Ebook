@@ -140,6 +140,7 @@ public class ReadBookActivity extends AppCompatActivity {
                     Log.d("savePage", "onDataChange: " + savePage);
                     if (currentUid.equals(uid) && currentBookId.equals(bookId)) {
                         savePageKey = snapshot.getKey();
+                        binding.btnSavePage.setImageResource(R.drawable.img_9);
                         break;
                     }
 

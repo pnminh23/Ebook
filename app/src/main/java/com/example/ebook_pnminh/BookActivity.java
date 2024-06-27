@@ -116,12 +116,12 @@ public class BookActivity extends AppCompatActivity {
                     binding.btnFavorite.setImageResource(R.drawable.img_3);
 
                     deleteBookFavorite(favoriteKey);
-                    Toast.makeText(BookActivity.this, "Sách đã có trong danh sách yêu thích", Toast.LENGTH_SHORT).show();
+
                 } else {
                     binding.btnFavorite.setImageResource(R.drawable.img);
 
                     addBookFavorites(uid, bookId);
-                    Toast.makeText(BookActivity.this, "Sách chưa có trong danh sách yêu thích", Toast.LENGTH_SHORT).show();
+
 
                 }
             }
@@ -193,7 +193,7 @@ public class BookActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Void unused) {
                 updateAddFavorites();
-                Toast.makeText(BookActivity.this, "Thêm sách thành công", Toast.LENGTH_SHORT).show();
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -212,12 +212,12 @@ public class BookActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Void unused) {
                 updateDeleteFavorites();
-                Toast.makeText(BookActivity.this, "Xóa sách khỏi danh sách yêu thích thành công", Toast.LENGTH_SHORT).show();
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(BookActivity.this, "Xóa sách khỏi danh sách yêu thích thất bại", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
